@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.boondocksaints.test.pruebaaudio.clases;
 
 import java.io.IOException;
@@ -13,7 +10,7 @@ import android.media.MediaRecorder;
  * Esta clase funciona como un medidor de sonido captado por el micrófono
  * del dispositivo móvil.
  */
-public class MedidorSonidoMicrofono {
+public class Sonometro {
 
 // Constantes *****************************************************************
 	static final private double FILTRO_EMA = 0.6;
@@ -108,7 +105,7 @@ public class MedidorSonidoMicrofono {
     }
 	
 // Constructores **************************************************************
-    public MedidorSonidoMicrofono() {
+    public Sonometro() {
 		super();
     	this.audioSource = DEFAULT_AUDIO_SOURCE;
     	this.audioEncoder = DEFAULT_AUDIO_ENCODER;
@@ -119,7 +116,7 @@ public class MedidorSonidoMicrofono {
         this.ema = 0.0;
 	}
 
-    public MedidorSonidoMicrofono(int outputFormat, int audioEncoder,
+    public Sonometro(int outputFormat, int audioEncoder,
 			String outputFile) {
 		super();
 		this.outputFormat = outputFormat;

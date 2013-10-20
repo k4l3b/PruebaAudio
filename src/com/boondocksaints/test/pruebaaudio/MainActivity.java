@@ -8,14 +8,14 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.boondocksaints.test.pruebaaudio.clases.AsyncTAskMedirDBEventos;
-import com.boondocksaints.test.pruebaaudio.clases.AsyncTaskMedirDB;
+import com.boondocksaints.test.pruebaaudio.clases.AsyncTaskSonometroEventos;
+import com.boondocksaints.test.pruebaaudio.clases.AsyncTaskSonometro;
 
-public class MainActivity extends Activity implements AsyncTAskMedirDBEventos {
+public class MainActivity extends Activity implements AsyncTaskSonometroEventos {
 
 	private TextView textViewDB;
 	private Button buttonDetener;
-	private AsyncTaskMedirDB atmDB;
+	private AsyncTaskSonometro atmDB;
 	private ProgressBar progressBarDB;
 	
 	private void obtenerInstancias()
@@ -44,11 +44,8 @@ public class MainActivity extends Activity implements AsyncTAskMedirDBEventos {
 		this.obtenerInstancias();
 		this.asignarListeners();
 
-		this.progressBarDB.setMax(1);
-
-		atmDB = new AsyncTaskMedirDB();
-		atmDB.setEventos(this);
-		atmDB.execute(1);
+		atmDB = new AsyncTaskSonometro(AsyncTaskSonometro.MUESTREO_RAPIDO, this, true);
+		atmDB.execute();
 		
 	}
 
@@ -60,14 +57,34 @@ public class MainActivity extends Activity implements AsyncTAskMedirDBEventos {
 	}
 
 	@Override
-	public void AsyncTAskMedirDBProgress(Double ema) {
+	public void onAsyncTaskSonometroEventosProgess(Double ema) {
 		this.textViewDB.setText(ema.toString());
 
 		double nivel = ema * 100;
 		int nivel_int = (int)nivel;
 		if (nivel_int > this.progressBarDB.getMax())
 			this.progressBarDB.setMax(nivel_int);
+
 		this.progressBarDB.setProgress(nivel_int);
 	}
+
+	@Override
+	public void onAsyncTaskSonometroEventosPreExecute() {
+		this.textViewDB.setText("Iniciando...");
+		this.progressBarDB.setMax(1);
+	}
+
+	@Override
+	public void onAsyncTaskSonometroEventosPostExecute() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onAsyncTaskSonometroEventosCancelled() {
+		this.textViewDB.setText("Terminado.");
+		
+	}
+
 
 }
