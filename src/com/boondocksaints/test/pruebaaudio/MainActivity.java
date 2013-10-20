@@ -15,6 +15,7 @@ public class MainActivity extends Activity implements AsyncTaskSonometroEventos 
 
 	private TextView textViewDB;
 	private Button buttonDetener;
+	private Button buttonIniciar;
 	private AsyncTaskSonometro atmDB;
 	private ProgressBar progressBarDB;
 	
@@ -22,13 +23,21 @@ public class MainActivity extends Activity implements AsyncTaskSonometroEventos 
 	{
 		this.textViewDB = (TextView) findViewById(R.id.textViewDB);
 		this.buttonDetener = (Button) findViewById(R.id.buttonDetener);
+		this.buttonIniciar = (Button) findViewById(R.id.buttonIniciar);
 		this.progressBarDB = (ProgressBar) findViewById(R.id.progressBarDB);
 	}
 	
 	private void asignarListeners()
 	{
+		this.buttonIniciar.setOnClickListener(new Button.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				atmDB = new AsyncTaskSonometro(AsyncTaskSonometro.MUESTREO_RAPIDO, MainActivity.this, true);
+				atmDB.execute();
+			}
+		});
+		
 		this.buttonDetener.setOnClickListener(new Button.OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				atmDB.cancel(true);
@@ -43,10 +52,9 @@ public class MainActivity extends Activity implements AsyncTaskSonometroEventos 
 		
 		this.obtenerInstancias();
 		this.asignarListeners();
-
-		atmDB = new AsyncTaskSonometro(AsyncTaskSonometro.MUESTREO_RAPIDO, this, true);
-		atmDB.execute();
-		
+	
+		this.buttonDetener.setEnabled(false);
+		this.buttonIniciar.setEnabled(true);
 	}
 
 	@Override
@@ -72,6 +80,8 @@ public class MainActivity extends Activity implements AsyncTaskSonometroEventos 
 	public void onAsyncTaskSonometroEventosPreExecute() {
 		this.textViewDB.setText("Iniciando...");
 		this.progressBarDB.setMax(1);
+		this.buttonDetener.setEnabled(true);
+		this.buttonIniciar.setEnabled(false);
 	}
 
 	@Override
@@ -83,6 +93,8 @@ public class MainActivity extends Activity implements AsyncTaskSonometroEventos 
 	@Override
 	public void onAsyncTaskSonometroEventosCancelled() {
 		this.textViewDB.setText("Terminado.");
+		this.buttonDetener.setEnabled(false);
+		this.buttonIniciar.setEnabled(true);
 		
 	}
 
